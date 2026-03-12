@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="description"
+        content="A beautiful interactive birthday surprise for Bhumika — unlock it step by step." />
+    <title>Happy Birthday Bhumika</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Poppins:wght@300;400;500;600&display=swap"
+        rel="stylesheet" />
+
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+    <!-- ════════════════════════════════════════
+     SPLASH SCREEN
+════════════════════════════════════════ -->
+    <div id="splash" role="status" aria-label="Loading birthday surprise">
+        <canvas id="splash-canvas"></canvas>
+        <div class="splash-content">
+            <p class="splash-hello">Hello Riddhi</p>
+            <p class="splash-sub">A little something made only for you...</p>
+        </div>
+        <div class="splash-loader">
+            <div class="splash-loader-fill"></div>
+        </div>
+    </div>
+
+
+    <!-- Background music — autoplay via user-gesture on splash tap -->
+    <audio id="bgMusic" loop preload="auto">
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" type="audio/mpeg" />
+        <source src="https://assets.mixkit.co/music/preview/mixkit-serene-view-443.mp3" type="audio/mpeg" />
+        <source src="https://assets.mixkit.co/music/preview/mixkit-dreaming-big-31.mp3" type="audio/mpeg" />
+    </audio>
+
+
+    <!-- ════════════════════════════════════════
+     MAIN WRAPPER
+════════════════════════════════════════ -->
+    <div id="main-wrapper" aria-live="polite">
+
+        <canvas id="main-canvas"></canvas>
+
+        <!-- Step progress bar (walkthrough steps 1–3) -->
+        <div id="step-progress" aria-label="Walkthrough progress">
+            <div class="sp-track">
+                <div class="sp-fill" id="sp-fill"></div>
+            </div>
+            <span class="sp-label" id="sp-label">Step 1 of 3</span>
+        </div>
+
+        <!-- Bottom nav dots (welcome only) -->
+        <nav id="progress-dots" aria-label="Section navigation">
+            <div class="dot active" id="dot-welcome"></div>
+            <div class="dot" id="dot-steps"></div>
+            <div class="dot" id="dot-reveal"></div>
+        </nav>
+
+
+        <!-- ──────────────────────────────────────
+       SECTION: WELCOME
+  ────────────────────────────────────── -->
+        <section id="section-welcome" class="section active" aria-label="Welcome">
+            <div class="glass-card">
+                <!-- Floating heart icon -->
+                <div class="welcome-icon anim-fade-up" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="#e91e8c">
+                        <path
+                            d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                    </svg>
+                </div>
+
+                <h1 class="welcome-title anim-fade-up delay-1">
+                    A small journey<br />before the surprise...
+                </h1>
+                <p class="welcome-sub anim-fade-up delay-2">
+                    Take a moment. Answer a few things.<br />The surprise waits at the end.
+                </p>
+
+                <button id="btn-start" class="btn-primary anim-fade-up delay-3">
+                    Start the Journey
+                    <svg viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z" />
+                    </svg>
+                </button>
+            </div>
+        </section>
+
+
+        <!-- ──────────────────────────────────────
+       SECTION: STEP 1 — YEAR QUESTION
+  ────────────────────────────────────── -->
+        <section id="section-step1" class="section" aria-label="Memory question step 1">
+            <div class="glass-card walkthrough-card">
+                <div class="step-header anim-fade-up">
+                    <div class="step-icon">
+                        <svg viewBox="0 0 24 24" fill="#e91e8c">
+                            <path
+                                d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+                        </svg>
+                    </div>
+                    <h2 class="step-heading">If you remember this...</h2>
+                    <p class="step-question">In which year did we meet each other?</p>
+                </div>
+
+                <div class="mcq-grid anim-fade-up delay-1" id="mcq-grid">
+                    <button class="mcq-btn" data-answer="2016">2016</button>
+                    <button class="mcq-btn" data-answer="2018">2018</button>
+                    <button class="mcq-btn" data-answer="2015">2015</button>
+                    <button class="mcq-btn" data-answer="2019">2019</button>
+                </div>
+
+                <div class="feedback-box" id="step1-feedback" aria-live="polite"></div>
+
+                <button id="btn-step1-continue" class="btn-primary anim-fade-up delay-2" disabled>
+                    Continue
+                    <svg viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z" />
+                    </svg>
+                </button>
+            </div>
+        </section>
+
+
+        <!-- ──────────────────────────────────────
+       SECTION: STEP 2 — HEART DRAG
+  ────────────────────────────────────── -->
+        <section id="section-step2" class="section" aria-label="Color memory step 2">
+            <div class="glass-card walkthrough-card">
+                <div class="step-header anim-fade-up">
+                    <div class="step-icon">
+                        <svg viewBox="0 0 24 24" fill="#e91e8c">
+                            <path
+                                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                        </svg>
+                    </div>
+                    <h2 class="step-heading">A small memory test</h2>
+                    <p class="step-question">Drop the heart of the color you used to assign with me.</p>
+                </div>
+
+                <div class="drop-zone anim-fade-up delay-1" id="drop-zone" aria-label="Drop your heart here">
+                    <div class="drop-zone-inner" id="drop-zone-inner">
+                        <svg class="dz-icon" viewBox="0 0 24 24" fill="none" stroke="rgba(233,30,140,0.3)"
+                            stroke-width="1.5">
+                            <path
+                                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                        </svg>
+                        <span class="dz-label">Drop here</span>
+                    </div>
+                </div>
+
+                <div class="hearts-drag-row anim-fade-up delay-2" id="hearts-drag-row">
+                    <div class="drag-heart" data-color="red" draggable="true" id="heart-red" role="button">
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                        </svg>
+                        <span>Red</span>
+                    </div>
+                    <div class="drag-heart" data-color="yellow" draggable="true" id="heart-yellow" role="button">
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                        </svg>
+                        <span>Yellow</span>
+                    </div>
+                    <div class="drag-heart" data-color="blue" draggable="true" id="heart-blue" role="button">
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                        </svg>
+                        <span>Blue</span>
+                    </div>
+                    <div class="drag-heart" data-color="purple" draggable="true" id="heart-purple" role="button">
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                        </svg>
+                        <span>Purple</span>
+                    </div>
+                </div>
+
+                <div class="feedback-box" id="step2-feedback" aria-live="polite"></div>
+
+                <button id="btn-step2-continue" class="btn-primary" disabled>
+                    Continue
+                    <svg viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z" />
+                    </svg>
+                </button>
+            </div>
+        </section>
+
+
+        <!-- ──────────────────────────────────────
+       SECTION: STEP 3 — PERSONAL QUESTION
+  ────────────────────────────────────── -->
+        <section id="section-step3" class="section" aria-label="Personal question step 3">
+            <div class="glass-card walkthrough-card">
+                <div class="step-header anim-fade-up">
+                    <div class="step-icon">
+                        <svg viewBox="0 0 24 24" fill="#e91e8c">
+                            <path
+                                d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z" />
+                        </svg>
+                    </div>
+                    <h2 class="step-heading">One last thing...</h2>
+                    <p class="step-question">Who am I to you?</p>
+                </div>
+
+                <div class="input-wrap anim-fade-up delay-1">
+                    <input type="text" id="step3-input" class="text-input" placeholder="Type your answer here..."
+                        maxlength="80" autocomplete="off" />
+                    <div class="input-underline"></div>
+                </div>
+
+                <div class="feedback-box" id="step3-feedback" aria-live="polite"></div>
+
+                <button id="btn-step3-submit" class="btn-primary anim-fade-up delay-2">
+                    Submit
+                    <svg viewBox="0 0 24 24">
+                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+                    </svg>
+                </button>
+                <button id="btn-step3-continue" class="btn-primary" disabled
+                    style="margin-top:12px;background:linear-gradient(135deg,#9c27b0,#7b1fa2);">
+                    Open the Surprise
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M20 12l-7.07 7.07-1.41-1.41L17.17 12 11.52 5.34l1.41-1.41L20 12zM4 12l7.07 7.07 1.41-1.41L6.83 12l5.65-6.66-1.41-1.41L4 12z" />
+                    </svg>
+                </button>
+            </div>
+        </section>
+
+
+        <!-- ══════════════════════════════════════
+       SECTION: EMOTIONAL MESSAGE SEQUENCE  (NEW)
+  ══════════════════════════════════════ -->
+        <section id="section-emotional" class="section" aria-label="A message for you">
+            <!-- Ambient orbs -->
+            <div class="emo-orbs" aria-hidden="true">
+                <div class="emo-orb eo-1"></div>
+                <div class="emo-orb eo-2"></div>
+                <div class="emo-orb eo-3"></div>
+            </div>
+
+            <!-- Single sentence display (auto-sequenced by JS) -->
+            <div id="emo-sentence-wrap" class="emo-sentence-wrap" aria-live="polite">
+                <div id="emo-sentence" class="emo-sentence"></div>
+            </div>
+
+            <!-- Full paragraph (revealed after all sentences) -->
+            <div id="emo-paragraph" class="emo-paragraph" aria-hidden="true">
+                <div class="emo-paragraph-glow" aria-hidden="true"></div>
+                <p class="emo-para-text">
+                    Sometimes people come into our lives quietly, but their presence changes things
+                    in the most beautiful way.
+                    <br /><br />
+                    They bring warmth, comfort, and moments that slowly turn into memories.
+                    <br /><br />
+                    And without even realizing it, they slowly become someone very important.
+                    <br /><br />
+                    So today I wanted to do something a little different.
+                    Something small, but made with thought and effort.
+                    <br /><br />
+                    This little website&hellip; I made it only for you.
+                </p>
+                <button id="btn-emo-continue" class="btn-primary emo-continue-btn">
+                    Continue
+                    <svg viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z" />
+                    </svg>
+                </button>
+            </div>
+        </section>
+
+
+        <!-- ══════════════════════════════════════
+       SECTION: DRAMATIC REVEAL  (NEW)
+  ══════════════════════════════════════ -->
+        <section id="section-reveal" class="section" aria-label="Birthday reveal">
+            <canvas id="confetti-canvas" aria-hidden="true"></canvas>
+
+            <!-- Ambient glow lights -->
+            <div class="reveal-lights" aria-hidden="true">
+                <div class="reveal-light rl-1"></div>
+                <div class="reveal-light rl-2"></div>
+                <div class="reveal-light rl-3"></div>
+            </div>
+
+            <!-- Word-by-word staged reveal -->
+            <div id="reveal-stage" class="reveal-stage">
+                <div id="reveal-happy" class="reveal-word rw-hidden">Happy</div>
+                <div id="reveal-birthday" class="reveal-word rw-hidden">Birthday</div>
+                <div id="reveal-name" class="reveal-word reveal-name rw-hidden">Bhumika</div>
+            </div>
+
+            <!-- Merged final heading (shown after all words assemble) -->
+            <div id="reveal-final" class="reveal-final rw-hidden" aria-live="polite">
+                <div class="reveal-final-glow" aria-hidden="true"></div>
+                <div class="reveal-sparkle-row" aria-hidden="true">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="#e91e8c">
+                        <path d="M12 1L9.5 8.5 2 12l7.5 3.5L12 23l2.5-7.5L22 12l-7.5-3.5z" />
+                    </svg>
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="#9c27b0">
+                        <path d="M12 1L9.5 8.5 2 12l7.5 3.5L12 23l2.5-7.5L22 12l-7.5-3.5z" />
+                    </svg>
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="#e91e8c">
+                        <path d="M12 1L9.5 8.5 2 12l7.5 3.5L12 23l2.5-7.5L22 12l-7.5-3.5z" />
+                    </svg>
+                </div>
+
+                <h2 class="reveal-final-heading">
+                    HAPPY BIRTHDAY
+                    <span class="reveal-final-name">BHUMIKA</span>
+                </h2>
+
+                <p class="reveal-final-sub">
+                    "May your day be as beautiful as your smile."
+                </p>
+
+                <!-- Flower divider -->
+                <div class="flower-divider" aria-hidden="true">
+                    <div class="fd-line"></div>
+                    <svg viewBox="0 0 64 64" width="22" height="22">
+                        <ellipse cx="32" cy="16" rx="5" ry="10" fill="#f9a8d4" transform="rotate(0,32,32)" />
+                        <ellipse cx="32" cy="16" rx="5" ry="10" fill="#fda4af" transform="rotate(60,32,32)" />
+                        <ellipse cx="32" cy="16" rx="5" ry="10" fill="#f9a8d4" transform="rotate(120,32,32)" />
+                        <ellipse cx="32" cy="16" rx="5" ry="10" fill="#fda4af" transform="rotate(180,32,32)" />
+                        <ellipse cx="32" cy="16" rx="5" ry="10" fill="#f9a8d4" transform="rotate(240,32,32)" />
+                        <ellipse cx="32" cy="16" rx="5" ry="10" fill="#fda4af" transform="rotate(300,32,32)" />
+                        <circle cx="32" cy="32" r="7" fill="#e91e8c" />
+                    </svg>
+                    <div class="fd-line"></div>
+                </div>
+
+                <p class="reveal-final-message">
+                    With everything in this heart — today is yours.<br />
+                    Celebrate every beautiful moment of it.
+                </p>
+
+                <button id="btn-restart" class="restart-btn">Replay the Surprise</button>
+            </div>
+        </section>
+
+    </div><!-- #main-wrapper -->
+
+    <script src="script.js"></script>
+</body>
+
+</html>
